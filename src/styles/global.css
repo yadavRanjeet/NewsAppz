@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Global Styles */
+body {
+    @apply bg-gray-100 text-gray-900;
+}
+
+input, button {
+    @apply border rounded-md p-2;
+}
+
+button {
+    @apply bg-blue-500 text-white hover:bg-blue-600 transition ease-in-out;
+}
