@@ -33,9 +33,9 @@ const Login = () => {
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
             <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-blue-200">
                 <div className="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center">
-                    <h1 className="text-4xl font-bold mb-4 text-blue-700">Welcome to Zollege</h1>
+                    <h1 className="text-4xl font-bold mb-4 text-blue-700">Welcome to Zollege News</h1>
                     <p className="text-lg text-gray-600 italic mb-8">
-                        "Empowering education, one step at a time."
+                        "Stay ahead of the game—where football stories take the lead."
                     </p>
                     <div className="space-y-4">
                         <input
