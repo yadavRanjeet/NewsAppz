@@ -1,30 +1,49 @@
-import React from 'react';
-import Filters from '../../components/Filters/Filters';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNewsAsync } from '../../features/newsSlice';
 import NewsTable from '../../components/News/NewsTable';
-import Chart from '../../components/Charts/Chart';
-import PayoutTable from '../../components/Payout/PayoutTable';
 
 const Home = () => {
-    const articles = []; // Mock articles data
-    const payouts = [];  // Mock payouts data
+    const dispatch = useDispatch();
+    const { articles, loading, error } = useSelector((state) => state.news);
 
-    const handleFilter = (filterCriteria) => {
-        console.log('Apply filters:', filterCriteria);
-    };
+    const [category, setCategory] = useState('health'); // Default category
+    const [countryCode, setCountryCode] = useState('in'); // Default country
 
-    const handleUpdatePayout = (id, rate) => {
-        console.log('Update payout rate:', { id, rate });
-    };
+    useEffect(() => {
+        dispatch(fetchNewsAsync({ category, countryCode }));
+    }, [dispatch, category, countryCode]);
 
     return (
-        <div className="p-6 space-y-6">
-            <Filters onFilter={handleFilter} />
-            <Chart data={articles} />
+        <div className="home p-6">
+            <h1 className="text-2xl font-bold mb-6 text-center">News Dashboard</h1>
+            <div className="flex justify-center mb-6 gap-4">
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="p-2 border rounded-lg"
+                >
+                    <option value="health">Health</option>
+                    <option value="sports">Sports</option>
+                    <option value="technology">Technology</option>
+                    <option value="business">Business</option>
+                </select>
+                <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="p-2 border rounded-lg"
+                >
+                    <option value="in">India</option>
+                    <option value="us">USA</option>
+                    <option value="gb">UK</option>
+                    <option value="au">Australia</option>
+                </select>
+            </div>
+            {loading && <p>Loading...</p>}
+            {error && <p>Error: {error}</p>}
             <NewsTable articles={articles} />
-            <PayoutTable payouts={payouts} onUpdate={handleUpdatePayout} />
         </div>
     );
 };
 
 export default Home;
-

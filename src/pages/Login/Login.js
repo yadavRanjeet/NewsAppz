@@ -1,59 +1,71 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../../features/authSlice';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
-
-    const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const navigate = useNavigate();
 
     const handleLogin = () => {
-        dispatch(login({ email, password }));
+        if (email === "user@example.com" && password === "password123") {
+            dispatch(login({ email }));
+            navigate('/home');
+        } else {
+            alert('Invalid email or password');
+        }
     };
 
     const handleGoogleSuccess = (response) => {
         console.log('Google Token:', response.credential);
-        // Dispatch user information
         dispatch(login({ token: response.credential }));
+        navigate('/home');
     };
 
-    const handleGoogleFailure = (error) => {
-        console.error('Google Login Failed:', error);
+    const handleGoogleFailure = () => {
+        console.error('Google Login Failed');
     };
 
     return (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <div className="login p-6 bg-white shadow-md rounded-lg max-w-sm mx-auto mt-10">
-                <h1 className="text-2xl font-bold mb-4">Login</h1>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full mb-4 p-2 border rounded-lg"
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full mb-4 p-2 border rounded-lg"
-                />
-                <button
-                    onClick={handleLogin}
-                    className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-                >
-                    Login
-                </button>
-                <div className="mt-4 text-center">
-                    <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleFailure}
-                        useOneTap
-                    />
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-blue-200">
+                <div className="bg-white shadow-xl rounded-lg p-8 max-w-md w-full text-center">
+                    <h1 className="text-4xl font-bold mb-4 text-blue-700">Welcome to Zollege</h1>
+                    <p className="text-lg text-gray-600 italic mb-8">
+                        "Empowering education, one step at a time."
+                    </p>
+                    <div className="space-y-4">
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-3 border rounded-lg text-lg focus:outline-none focus:ring focus:ring-blue-300"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-3 border rounded-lg text-lg focus:outline-none focus:ring focus:ring-blue-300"
+                        />
+                        <button
+                            onClick={handleLogin}
+                            className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-bold hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                        >
+                            Login
+                        </button>
+                    </div>
+                    <div className="mt-6">
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={handleGoogleFailure}
+                            className="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+                        />
+                    </div>
                 </div>
             </div>
         </GoogleOAuthProvider>
